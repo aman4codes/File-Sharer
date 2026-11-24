@@ -1,9 +1,7 @@
 import express from "express";
-import dotenv from "dotenv";
-import multer from "multer";
-import connectDB from "./src/db.js"
-
-dotenv.config();
+import "dotenv/config";
+import connectDB from "./config/db.js"
+import imageRoutes from "./routes/image.routes.js";
 
 const app = express();
 
@@ -11,19 +9,7 @@ app.use(express.json());
 
 connectDB();
 
-const upload = multer({
-    dest: "uploads/"
-});
-
-app.post("/upload", upload.single("image"), (req, res) => {
-
-    console.log(req.file);
-
-    res.json({
-        messgae: "File uploaded succesfully",
-        file: req.file
-    })
-});
+app.use("/api/images", imageRoutes);
 
 app.get("/", (req, res) => {
     res.send("Server is On");
